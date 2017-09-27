@@ -56,7 +56,11 @@ int main(int argc, char *argv[])
 #endif
 
 #if defined(__GNUC__)
+#ifdef OPT
+    __builtin___clear_cache((char *) table, (char *) table + TABLE_SIZE * sizeof(entry *));
+#else
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
+#endif
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
@@ -97,7 +101,11 @@ int main(int argc, char *argv[])
 #endif
 
 #if defined(__GNUC__)
+#ifdef OPT
+    __builtin___clear_cache((char *) table, (char *) table + TABLE_SIZE * sizeof(entry *));
+#else
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
+#endif
 #endif
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
