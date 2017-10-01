@@ -12,5 +12,6 @@ orig.txt
 opt.txt
 output.txt
 runtime.png
-manual/*.txt
 .ycm_extra_conf.py
+*.png
+*.txt

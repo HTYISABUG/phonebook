@@ -73,3 +73,10 @@ void clear(entry *table[])
         }
     }
 }
+
+entry *addData(entry *e)
+{
+    e->data = (Data *) malloc(sizeof(Data));
+
+    return e;
+}
