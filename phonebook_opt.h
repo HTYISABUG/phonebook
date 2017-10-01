@@ -21,10 +21,12 @@ typedef struct __PHONE_BOOK_ENTRY {
 } entry;
 
 #define TABLE_SIZE 2017
+//#define TABLE_SIZE 4013
+//#define TABLE_SIZE 8191
 
 entry *findName(char lastName[], entry *table[]);
 entry *append(char lastName[], entry *table[]);
-int hash(char str[]);
+unsigned int hash(char str[], int mode);
 void clear(entry *table[]);
 
 #endif

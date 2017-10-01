@@ -3,10 +3,14 @@
 
 #include "phonebook_opt.h"
 
+enum {MOD, BKDR};
+/*#define HASH_MODE MOD*/
+#define HASH_MODE BKDR
+
 /* FILL YOUR OWN IMPLEMENTATION HERE! */
 entry *findName(char lastName[], entry *table[])
 {
-    entry *e = table[hash(lastName)];
+    entry *e = table[hash(lastName, HASH_MODE)];
 
     while (e != NULL) {
         if (strcasecmp(lastName, e->lastName) == 0) {
@@ -21,7 +25,7 @@ entry *findName(char lastName[], entry *table[])
 
 entry *append(char lastName[], entry *table[])
 {
-    int key = hash(lastName);
+    int key = hash(lastName, HASH_MODE);
 
     entry *e = (entry *) malloc(sizeof(entry));
 
@@ -35,12 +39,23 @@ entry *append(char lastName[], entry *table[])
     return NULL;
 }
 
-int hash(char str[])
+unsigned int hash(char str[], int mode)
 {
-    int h = 0;
+    const unsigned int seed = 13131;
+    unsigned int h = 0;
 
-    while (*str) {
-        h += *str++;
+    switch (mode) {
+    case MOD:
+        while (*str) {
+            h += *str++;
+        }
+        break;
+    case BKDR:
+        while (*str) {
+            h = h * seed + (*str++);
+        }
+        h &= 0x7FFFFFFF;
+        break;
     }
 
     return (h % TABLE_SIZE);
