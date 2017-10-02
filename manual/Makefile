@@ -1,7 +1,7 @@
 CC ?= gcc
 CFLAGS_common ?= -Wall -std=gnu99 -g -O0
 
-all: calculate  
+all: calculate mode size
 
 calculate: calculate.c
 	$(CC) $(CFLAGS_common) $^ -o $@
