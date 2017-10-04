@@ -23,11 +23,11 @@ entry *findName(char lastName[], entry *table[])
     return NULL;
 }
 
-entry *append(char lastName[], entry *table[])
+entry *append(char lastName[], entry *table[], MemPool *pool)
 {
     int key = hash(lastName, HASH_MODE);
 
-    entry *e = (entry *) malloc(sizeof(entry));
+    entry *e = (entry *) poolloc(sizeof(entry), pool);
 
     if (e) {
         e->pNext = table[key];
@@ -61,17 +61,13 @@ unsigned int hash(char str[], int mode)
     return (h % TABLE_SIZE);
 }
 
-void clear(entry *table[])
+void clear(entry *table[], MemPool *pool)
 {
-    entry *e;
-
     for (int i = 0; i < TABLE_SIZE; ++i) {
-        while (table[i]) {
-            e = table[i]->pNext;
-            free(table[i]);
-            table[i] = e;
-        }
+        table[i] = NULL;
     }
+
+    free(pool);
 }
 
 entry *addData(entry *e)
@@ -79,4 +75,29 @@ entry *addData(entry *e)
     e->data = (Data *) malloc(sizeof(Data));
 
     return e;
+}
+
+void *poolloc(size_t size, MemPool *pool)
+{
+    if (pool->cnt + size <= pool->size) {
+        void *p = pool->ptr + pool->cnt;
+        pool->cnt += size;
+        return p;
+    }
+
+    return NULL;
+}
+
+MemPool *memPool(size_t size)
+{
+    MemPool *pool = (MemPool *) malloc(sizeof(MemPool));
+
+    if (pool) {
+        pool->ptr = (void *) malloc(size);
+        pool->size = size;
+        pool->cnt = 0;
+        return pool;
+    }
+
+    return NULL;
 }

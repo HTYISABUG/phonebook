@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 
     /* build the entry */
 #ifdef OPT
+    MemPool *pool = memPool(400000 * sizeof(entry));
     entry *table[TABLE_SIZE];
     memset(table, 0, TABLE_SIZE * sizeof(entry *));
     printf("size of entry : %lu bytes\n", sizeof(entry));
@@ -69,7 +70,7 @@ int main(int argc, char *argv[])
         line[i - 1] = '\0';
         i = 0;
 #ifdef OPT
-        append(line, table);
+        append(line, table, pool);
 #else
         e = append(line, e);
 #endif
@@ -126,7 +127,7 @@ int main(int argc, char *argv[])
     printf("execution time of findName() : %lf sec\n", cpu_time2);
 
 #ifdef OPT
-    clear(table);
+    clear(table, pool);
 #else
     if (pHead->pNext) free(pHead->pNext);
     free(pHead);
